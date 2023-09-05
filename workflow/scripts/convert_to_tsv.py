@@ -34,6 +34,7 @@ def parse_file(path: str) -> list:
                 line_data.append(item)
                 
     # add last premirna to datalist
+    line_data[3] = remove_brackets(line_data[3])
     data_list.append(convert_to_tsv(line_data))
 
     return data_list
