@@ -1,0 +1,9 @@
+name: testenv
+channels:
+  - conda-forge
+  - bioconda
+
+dependencies:
+  - biopython=1.81
+  - viennarna=2.6.3
+  - pytest=7.4.1

@@ -1,0 +1,5 @@
+genomes:
+  cel:
+    seq: test-files/c-elegans.fa.gz
+    ann: test-files/c-elegans.gff3.gz
+    temp: 20

@@ -1,0 +1,8 @@
+!.gitignore
+__pycache__/
+results/
+logs/
+.snakemake*
+.*.swp
+*.fai
+.vscode

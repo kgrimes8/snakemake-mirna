@@ -1,0 +1,58 @@
+configfile: "config/config.yaml"
+
+
+def get_final_output(wc):
+    for org in config["genomes"]:
+        yield f"results/structures/{org}.tsv.gz"
+
+
+rule all:
+    input:
+        get_final_output,
+
+
+# extract the miRNA precursors sequences using the seq and ann files
+rule extract_precursors:
+    input:
+        seq=lambda wc: config["genomes"][wc.org]["seq"],
+        ann=lambda wc: config["genomes"][wc.org]["ann"],
+    output:
+        "results/precursors/{org}.fa.gz",
+    log:
+        "logs/extract_precursors_{org}.log",
+    conda:
+        "envs/extract_precursors.yaml"
+    script:
+        "scripts/extract_precursors.py"
+
+
+# predict the structure for all sequences in the fasta file (dot-bracket format)
+rule predict_structure:
+    input:
+        "results/precursors/{org}.fa.gz",
+    output:
+        "results/structures/{org}.out.gz",
+    params:
+        temp=lambda wc: config["genomes"][wc.org]["temp"],
+    log:
+        stdout="logs/predict_structure_{org}.stdout",
+        stderr="logs/predict_structure_{org}.stderr",
+    conda:
+        "envs/predict_structure.yaml"
+    shell:
+        """
+        (zcat {input} | RNAfold --noPS | gzip >> {output} && echo 'Predict Structure for {wildcards.org}: Complete') > {log.stdout} 2> {log.stderr}
+    """
+
+
+# convert the predictions output to a tsv file
+# columns: sequence_id\tsequence\tstructure\tmfe
+rule convert_to_tsv:
+    input:
+        "results/structures/{org}.out.gz",
+    output:
+        "results/structures/{org}.tsv.gz"
+    log:
+        "logs/convert_to_tsv_{org}.log",
+    script:
+        "scripts/convert_to_tsv.py"

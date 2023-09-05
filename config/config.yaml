@@ -1,0 +1,10 @@
+genomes:
+  cel:
+    seq: genomes/c-elegans/Caenorhabditis_elegans.WBcel235.dna.toplevel.fa.gz
+    ann: genomes/c-elegans/Caenorhabditis_elegans.WBcel235.110.gff3.gz
+    temp: 20
+  dme:
+    seq: genomes/drophila/Drosophila_melanogaster.BDGP6.46.dna.toplevel.fa.gz
+    ann: genomes/drophila/Drosophila_melanogaster.BDGP6.46.110.gff3.gz
+    temp: 20
+nseqs: 10
